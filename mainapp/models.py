@@ -6,14 +6,6 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 User = get_user_model()
 
 
-# 1. Category
-# 2. Product
-# 3. CartProduct
-# 4. Cart
-# 5. Order (не создан)
-# 6. Customer
-# 7. Specifications (удален)
-
 class Category(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название категории')
     slug = models.SlugField(unique=True)
@@ -23,7 +15,6 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-
     class Meta:
         abstract = True
 
@@ -36,6 +27,33 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Notebook(Product):
+    diagonal = models.CharField(max_length=255, verbose_name='Диагональ')
+    display = models.CharField(max_length=255, verbose_name='Тип дисплея')
+    processor_freq = models.CharField(max_length=255, verbose_name='Частота процессора')
+    ram = models.CharField(max_length=255, verbose_name='Оперативная память')
+    video = models.CharField(max_length=255, verbose_name='Видеокарта')
+    time_without_charge = models.CharField(max_length=255, verbose_name='Время работы без зарядки')
+
+    def __str__(self):
+        return "{} : {}".format(self.category.name, self.title)
+
+
+class Smartphone(Product):
+    diagonal = models.CharField(max_length=255, verbose_name='Диагональ')
+    display = models.CharField(max_length=255, verbose_name='Тип дисплея')
+    resolution = models.CharField(max_length=255, verbose_name='Разрешение экрана')
+    accum_volume = models.CharField(max_length=255, verbose_name='Объем батареи')
+    ram = models.CharField(max_length=255, verbose_name='Оперативная память')
+    sd = models.BooleanField(default=True)
+    sd_volume = models.CharField(max_length=255, verbose_name='Максимальной объем встраимовой памяти')
+    main_cam_mp = models.CharField(max_length=255, verbose_name='Главная камера')
+    front_cam_mp =models.CharField(max_length=255, verbose_name='Фронтальная камера')
+
+    def __str__(self):
+        return "{} : {}".format(self.category.name, self.title)
 
 
 class CartProduct(models.Model):
@@ -68,4 +86,3 @@ class Customer(models.Model):
 
     def __str__(self):
         return f'Покупатель {self.user.last_name} {self.user.first_name}'
-
